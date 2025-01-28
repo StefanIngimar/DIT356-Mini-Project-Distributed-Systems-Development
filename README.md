@@ -1,0 +1,1 @@
+This is a group project that I worked on for the course DIT356. The documentation for the project can be found in the 'Documentation' repository, and the 'Entrypoint' repository contains instructions on how to run the project in Docker.
