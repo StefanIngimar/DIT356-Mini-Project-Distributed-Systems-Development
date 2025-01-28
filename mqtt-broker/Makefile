@@ -1,0 +1,5 @@
+build:
+	docker build -t mqtt-broker .
+
+run: build
+	docker run -d -p 1883:1883 -p 9001:9001 --name message-broker mqtt-broker 

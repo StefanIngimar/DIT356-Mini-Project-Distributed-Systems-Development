@@ -1,0 +1,2208 @@
+{
+	"info": {
+		"_postman_id": "d3b5a38a-cdf5-4a59-82e5-86cf3c308f50",
+		"name": "GothTeeth",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32425632"
+	},
+	"item": [
+		{
+			"name": "health",
+			"item": [
+				{
+					"name": "perform health check",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 status code\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/health",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"health"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get root message",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"200 status code\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/api/v1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "clinics and dentists",
+			"item": [
+				{
+					"name": "Add Clinic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains clinic data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData).to.have.property(\"name\", \"Sample clinic\");\r",
+									"    pm.expect(jsonData).to.have.property(\"description\", \"Sample description\");\r",
+									"    pm.expect(jsonData).to.have.property(\"logo_url\", \"https://static.vecteezy.com/system/resources/thumbnails/005/495/317/small_2x/dental-clinic-logo-template-dental-care-logo-designs-tooth-teeth-smile-dentist-logo-vector.jpg\");\r",
+									"\r",
+									"    pm.expect(jsonData).to.have.property(\"address\").to.be.an(\"object\");\r",
+									"    const addressData = jsonData.address;\r",
+									"    pm.expect(addressData).to.have.property(\"id\");\r",
+									"    pm.expect(addressData).to.have.property(\"street\", \"Samplestreet 25\");\r",
+									"    pm.expect(addressData).to.have.property(\"city\", \"Göteborg\");\r",
+									"    pm.expect(addressData).to.have.property(\"postal_code\", \"41753\");\r",
+									"    pm.expect(addressData).to.have.property(\"country\", \"Sverige\");\r",
+									"    pm.expect(addressData).to.have.property(\"latitude\", 57.709130);\r",
+									"    pm.expect(addressData).to.have.property(\"longitude\", 11.937440);\r",
+									"\r",
+									"    pm.expect(jsonData).to.have.property(\"contact\").to.be.an(\"object\");\r",
+									"    const contactData = jsonData.contact;\r",
+									"    pm.expect(contactData).to.have.property(\"id\");\r",
+									"    pm.expect(contactData).to.have.property(\"email\", \"info@sampleclinic.se\");\r",
+									"    pm.expect(contactData).to.have.property(\"phone_number\", \"0123456789\");\r",
+									"\r",
+									"    pm.environment.set(\"clinicId\", jsonData.id);\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sample clinic\",\r\n    \"description\": \"Sample description\",\r\n    \"address\": {\r\n        \"street\": \"Samplestreet 25\",\r\n        \"city\": \"Göteborg\",\r\n        \"postal_code\": \"41753\",\r\n        \"country\": \"Sverige\",\r\n        \"latitude\": 57.709130,\r\n        \"longitude\": 11.937440\r\n    },\r\n    \"contact\": {\r\n        \"email\": \"info@sampleclinic.se\",\r\n        \"phone_number\": \"0123456789\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/clinics",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Dentist To Clinic",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains dentist data\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    \r",
+									"    pm.expect(jsonData).to.have.property(\"id\");\r",
+									"    pm.expect(jsonData).to.have.property(\"user_id\");\r",
+									"    pm.expect(jsonData).to.have.property(\"first_name\", \"Jane\");\r",
+									"    pm.expect(jsonData).to.have.property(\"last_name\", \"Doe\");\r",
+									"    pm.expect(jsonData).to.have.property(\"image_url\", \"https://images.vexels.com/media/users/3/151709/isolated/preview/098c4aad185294e67a3f695b3e64a2ec-doctor-avatar-icon.png?w=360\");\r",
+									"    pm.expect(jsonData).to.have.property(\"specialization\", \"Dentist\");\r",
+									"    pm.expect(jsonData).to.have.property(\"years_of_experiance\", 5);\r",
+									"    \r",
+									"    pm.expect(jsonData).to.have.property(\"contact\").to.be.an(\"object\");\r",
+									"    const contactData = jsonData.contact;\r",
+									"    pm.expect(contactData).to.have.property(\"id\");\r",
+									"    pm.expect(contactData).to.have.property(\"email\", \"janeDoe@email.com\");\r",
+									"    pm.expect(contactData).to.have.property(\"phone_number\", \"11223344\");\r",
+									"\r",
+									"    pm.environment.set(\"dentistId\", jsonData.id);\r",
+									"    pm.environment.set(\"dentistUserId\", jsonData.user_id);\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Jane\",\r\n    \"last_name\": \"Doe\",\r\n    \"specialization\": \"Dentist\",\r\n    \"years_of_experiance\": 5,\r\n    \"contact\": {\r\n        \"email\": \"janeDoe@email.com\",\r\n        \"phone_number\": \"11223344\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/clinics/{{clinicId}}/dentists",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics",
+								"{{clinicId}}",
+								"dentists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Clinics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"Response contains clincs data\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    jsonData.forEach(clinic => {",
+									"        pm.expect(clinic).to.have.property(\"id\");",
+									"        pm.expect(clinic).to.have.property(\"name\", \"Sample clinic\");",
+									"        pm.expect(clinic).to.have.property(\"description\", \"Sample description\");",
+									"        pm.expect(clinic).to.have.property(\"logo_url\", \"https://static.vecteezy.com/system/resources/thumbnails/005/495/317/small_2x/dental-clinic-logo-template-dental-care-logo-designs-tooth-teeth-smile-dentist-logo-vector.jpg\");",
+									"",
+									"        pm.expect(clinic).to.have.property(\"address\").to.be.an(\"object\");",
+									"        const addressData = clinic.address;",
+									"        pm.expect(addressData).to.have.property(\"id\");",
+									"        pm.expect(addressData).to.have.property(\"street\", \"Samplestreet 25\");",
+									"        pm.expect(addressData).to.have.property(\"city\", \"Göteborg\");",
+									"        pm.expect(addressData).to.have.property(\"postal_code\", \"41753\");",
+									"        pm.expect(addressData).to.have.property(\"country\", \"Sverige\");",
+									"        pm.expect(addressData).to.have.property(\"latitude\", 57.709130);",
+									"        pm.expect(addressData).to.have.property(\"longitude\", 11.937440);",
+									"",
+									"        pm.expect(clinic).to.have.property(\"contact\").to.be.an(\"object\");",
+									"        const contactData = clinic.contact;",
+									"        pm.expect(contactData).to.have.property(\"id\");",
+									"        pm.expect(contactData).to.have.property(\"email\", \"info@sampleclinic.se\");",
+									"        pm.expect(contactData).to.have.property(\"phone_number\", \"0123456789\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/clinics",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Clinic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains clinic data\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    ",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData).to.have.property(\"name\", \"Sample clinic\");",
+									"    pm.expect(jsonData).to.have.property(\"description\", \"Sample description\");",
+									"    pm.expect(jsonData).to.have.property(\"logo_url\", \"https://static.vecteezy.com/system/resources/thumbnails/005/495/317/small_2x/dental-clinic-logo-template-dental-care-logo-designs-tooth-teeth-smile-dentist-logo-vector.jpg\");",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"address\").to.be.an(\"object\");",
+									"    const addressData = jsonData.address;",
+									"    pm.expect(addressData).to.have.property(\"id\");",
+									"    pm.expect(addressData).to.have.property(\"street\", \"Samplestreet 25\");",
+									"    pm.expect(addressData).to.have.property(\"city\", \"Göteborg\");",
+									"    pm.expect(addressData).to.have.property(\"postal_code\", \"41753\");",
+									"    pm.expect(addressData).to.have.property(\"country\", \"Sverige\");",
+									"    pm.expect(addressData).to.have.property(\"latitude\", 57.709130);",
+									"    pm.expect(addressData).to.have.property(\"longitude\", 11.937440);",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"contact\").to.be.an(\"object\");",
+									"    const contactData = jsonData.contact;",
+									"    pm.expect(contactData).to.have.property(\"id\");",
+									"    pm.expect(contactData).to.have.property(\"email\", \"info@sampleclinic.se\");",
+									"    pm.expect(contactData).to.have.property(\"phone_number\", \"0123456789\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/clinics/{{clinicId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics",
+								"{{clinicId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dentists For A Clinic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"Response contains dentists data\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    jsonData.forEach(dentist => {",
+									"        pm.expect(dentist).to.have.property(\"id\");",
+									"        pm.expect(dentist).to.have.property(\"user_id\");",
+									"        pm.expect(dentist).to.have.property(\"first_name\", \"Jane\");",
+									"        pm.expect(dentist).to.have.property(\"last_name\", \"Doe\");",
+									"        pm.expect(dentist).to.have.property(\"image_url\", \"https://images.vexels.com/media/users/3/151709/isolated/preview/098c4aad185294e67a3f695b3e64a2ec-doctor-avatar-icon.png?w=360\");",
+									"        pm.expect(dentist).to.have.property(\"specialization\", \"Dentist\");",
+									"        pm.expect(dentist).to.have.property(\"years_of_experiance\", 5);",
+									"",
+									"        pm.expect(dentist).to.have.property(\"contact\").to.be.an(\"object\");",
+									"        const contactData = dentist.contact;",
+									"        pm.expect(contactData).to.have.property(\"id\");",
+									"        pm.expect(contactData).to.have.property(\"email\", \"janeDoe@email.com\");",
+									"        pm.expect(contactData).to.have.property(\"phone_number\", \"11223344\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/clinics/{{clinicId}}/dentists",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics",
+								"{{clinicId}}",
+								"dentists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dentists With Appointment Time Slots For A Clinic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"Response contains clincs data\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    jsonData.forEach(dentist => {",
+									"        pm.expect(dentist).to.have.property(\"id\");",
+									"        pm.expect(dentist).to.have.property(\"user_id\");",
+									"        pm.expect(dentist).to.have.property(\"first_name\", \"Jane\");",
+									"        pm.expect(dentist).to.have.property(\"last_name\", \"Doe\");",
+									"        pm.expect(dentist).to.have.property(\"image_url\", \"https://images.vexels.com/media/users/3/151709/isolated/preview/098c4aad185294e67a3f695b3e64a2ec-doctor-avatar-icon.png?w=360\");",
+									"        pm.expect(dentist).to.have.property(\"specialization\", \"dentist\");",
+									"        pm.expect(dentist).to.have.property(\"years_of_experiance\", 5);",
+									"",
+									"        pm.expect(dentist).to.have.property(\"contact\").to.be.an(\"object\");",
+									"        const contactData = dentist.contact;",
+									"        pm.expect(contactData).to.have.property(\"id\");",
+									"        pm.expect(contactData).to.have.property(\"email\", \"janeDoe@email.com\");",
+									"        pm.expect(contactData).to.have.property(\"phone_number\", \"11223344\");",
+									"",
+									"        pm.expect(dentist).to.have.property(\"time_slots\").to.be.an(\"array\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/clinics/{{clinicId}}/dentists/appointments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics",
+								"{{clinicId}}",
+								"dentists",
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dentists",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"Response contains dentists data\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    jsonData.forEach(dentist => {",
+									"        pm.expect(dentist).to.have.property(\"id\");",
+									"        pm.expect(dentist).to.have.property(\"user_id\");",
+									"        pm.expect(dentist).to.have.property(\"first_name\", \"Jane\");",
+									"        pm.expect(dentist).to.have.property(\"last_name\", \"Doe\");",
+									"        pm.expect(dentist).to.have.property(\"image_url\", \"https://images.vexels.com/media/users/3/151709/isolated/preview/098c4aad185294e67a3f695b3e64a2ec-doctor-avatar-icon.png?w=360\");",
+									"        pm.expect(dentist).to.have.property(\"specialization\", \"Dentist\");",
+									"        pm.expect(dentist).to.have.property(\"years_of_experiance\", 5);",
+									"",
+									"        pm.expect(dentist).to.have.property(\"contact\").to.be.an(\"object\");",
+									"        const contactData = dentist.contact;",
+									"        pm.expect(contactData).to.have.property(\"id\");",
+									"        pm.expect(contactData).to.have.property(\"email\", \"janeDoe@email.com\");",
+									"        pm.expect(contactData).to.have.property(\"phone_number\", \"11223344\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/dentists",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dentists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dentist",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains dentist data\", function () {",
+									"    const jsonData = pm.response.json();",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData).to.have.property(\"user_id\");",
+									"    pm.expect(jsonData).to.have.property(\"first_name\", \"Jane\");",
+									"    pm.expect(jsonData).to.have.property(\"last_name\", \"Doe\");",
+									"    pm.expect(jsonData).to.have.property(\"image_url\", \"https://images.vexels.com/media/users/3/151709/isolated/preview/098c4aad185294e67a3f695b3e64a2ec-doctor-avatar-icon.png?w=360\");",
+									"    pm.expect(jsonData).to.have.property(\"specialization\", \"Dentist\");",
+									"    pm.expect(jsonData).to.have.property(\"years_of_experiance\", 5);",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"contact\").to.be.an(\"object\");",
+									"    const contactData = jsonData.contact;",
+									"    pm.expect(contactData).to.have.property(\"id\");",
+									"    pm.expect(contactData).to.have.property(\"email\", \"janeDoe@email.com\");",
+									"    pm.expect(contactData).to.have.property(\"phone_number\", \"11223344\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/dentists/{{dentistId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dentists",
+								"{{dentistId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dentist From User ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains dentist user data\", function () {",
+									"    const jsonData = pm.response.json();",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData).to.have.property(\"user_id\");",
+									"    pm.expect(jsonData).to.have.property(\"first_name\", \"Jane\");",
+									"    pm.expect(jsonData).to.have.property(\"last_name\", \"Doe\");",
+									"    pm.expect(jsonData).to.have.property(\"image_url\", \"https://images.vexels.com/media/users/3/151709/isolated/preview/098c4aad185294e67a3f695b3e64a2ec-doctor-avatar-icon.png?w=360\");",
+									"    pm.expect(jsonData).to.have.property(\"specialization\", \"Dentist\");",
+									"    pm.expect(jsonData).to.have.property(\"years_of_experiance\", 5);",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"contact\").to.be.an(\"object\");",
+									"    const contactData = jsonData.contact;",
+									"    pm.expect(contactData).to.have.property(\"id\");",
+									"    pm.expect(contactData).to.have.property(\"email\", \"janeDoe@email.com\");",
+									"    pm.expect(contactData).to.have.property(\"phone_number\", \"11223344\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/dentists/users/{{dentistUserId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dentists",
+								"users",
+								"{{dentistUserId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Dentist With Clinics",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains dentist data with associated clinics\", function () {",
+									"    const jsonData = pm.response.json();",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData).to.have.property(\"user_id\");",
+									"    pm.expect(jsonData).to.have.property(\"first_name\", \"Jane\");",
+									"    pm.expect(jsonData).to.have.property(\"last_name\", \"Doe\");",
+									"    pm.expect(jsonData).to.have.property(\"image_url\", \"https://images.vexels.com/media/users/3/151709/isolated/preview/098c4aad185294e67a3f695b3e64a2ec-doctor-avatar-icon.png?w=360\");",
+									"    pm.expect(jsonData).to.have.property(\"specialization\", \"Dentist\");",
+									"    pm.expect(jsonData).to.have.property(\"years_of_experiance\", 5);",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"contact\").to.be.an(\"object\");",
+									"    const contactData = jsonData.contact;",
+									"    pm.expect(contactData).to.have.property(\"id\");",
+									"    pm.expect(contactData).to.have.property(\"email\", \"janeDoe@email.com\");",
+									"    pm.expect(contactData).to.have.property(\"phone_number\", \"11223344\");",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"clinics\").to.be.an(\"array\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/dentists/{{dentistId}}/clinics",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"dentists",
+								"{{dentistId}}",
+								"clinics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Clinic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/clinics/{{clinicId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics",
+								"{{clinicId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "appointments",
+			"item": [
+				{
+					"name": "POST CLINIC",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 201\", () => {",
+									"  pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"pm.globals.set(\"clinicId\", pm.response.json().id);",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Top-level fields are correct\", () => {",
+									"  pm.expect(jsonData).to.have.property(\"id\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData.name).to.equal(\"Lindholmen teeth clinic\");",
+									"  pm.expect(jsonData.description).to.equal(\"Dentist\");",
+									"});",
+									"",
+									"pm.test(\"Address fields are correct\", () => {",
+									"  pm.expect(jsonData.address).to.have.property(\"id\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData.address.street).to.equal(\"Lindholmsallén 25\");",
+									"  pm.expect(jsonData.address.city).to.equal(\"Göteborg\");",
+									"  pm.expect(jsonData.address.postal_code).to.equal(\"41753\");",
+									"  pm.expect(jsonData.address.country).to.equal(\"Svärje\");",
+									"});",
+									"",
+									"pm.test(\"Contact fields are correct\", () => {",
+									"  pm.expect(jsonData.contact).to.have.property(\"id\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData.contact.email).to.equal(\"no@email.com\");",
+									"  pm.expect(jsonData.contact.phone_number).to.equal(\"000000000\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Lindholmen teeth clinic\",\n  \"description\": \"Dentist\",\n  \"address\": {\n    \"street\": \"Lindholmsallén 25\",\n    \"city\": \"Göteborg\",\n    \"postal_code\": \"41753\",\n    \"country\": \"Svärje\"\n  },\n  \"contact\": {\n    \"email\": \"no@email.com\",\n    \"phone_number\": \"000000000\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/clinics",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST DENTIST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 201\", () => {",
+									"  pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.globals.set(\"dentistId\", pm.response.json().id);",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Top-level fields are correct\", () => {",
+									"  pm.expect(jsonData).to.have.property(\"id\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData).to.have.property(\"user_id\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData.first_name).to.equal(\"Doctor\");",
+									"  pm.expect(jsonData.last_name).to.equal(\"Stefan\");",
+									"  pm.expect(jsonData.specialization).to.equal(\"dentist\");",
+									"  pm.expect(jsonData.years_of_experiance).to.equal(11);",
+									"});",
+									"",
+									"pm.test(\"Contact fields are correct\", () => {",
+									"  pm.expect(jsonData.contact).to.have.property(\"id\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData.contact.email).to.equal(\"doctor@stefan55.se\");",
+									"  pm.expect(jsonData.contact.phone_number).to.equal(\"000000000\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"first_name\": \"Doctor\",\n  \"last_name\": \"Stefan\",\n  \"specialization\": \"dentist\",\n  \"years_of_experiance\": 11,\n  \"contact\": {\n    \"email\": \"doctor@stefan55.se\",\n    \"phone_number\": \"000000000\"\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/clinics/{{clinicId}}/dentists",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics",
+								"{{clinicId}}",
+								"dentists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "POST APPOINTMENT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 201\", () => {",
+									"  pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"pm.globals.set(\"appointmentId\", pm.response.json()._id);",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Top-level fields are correct\", () => {",
+									"  pm.expect(jsonData).to.have.property(\"clinicId\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData).to.have.property(\"dentistId\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData).to.have.property(\"_id\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData.status).to.equal(\"FREE\");",
+									"  pm.expect(jsonData.start_time).to.equal(\"20:45\");",
+									"  pm.expect(jsonData.end_time).to.equal(\"21:45\");",
+									"  pm.expect(jsonData.date).to.equal(\"2024-12-21T00:00:00.000Z\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"clinicId\": \"{{clinicId}}\",\n    \"date\": \"2024-12-21\",\n    \"dentistId\": \"{{dentistId}}\",\n    \"start_time\": \"20:45\",\n    \"end_time\": \"21:45\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/appointments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY CLINIC",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/appointments/clinic/{{clinicId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"appointments",
+								"clinic",
+								"{{clinicId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET ALL",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/appointments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY DENTIST",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/appointments/dentist/{{dentistId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"appointments",
+								"dentist",
+								"{{dentistId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET STATUS",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/appointments/status/{{clinicId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"appointments",
+								"status",
+								"{{clinicId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET BY ID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/appointments/{{appointmentId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"appointments",
+								"{{appointmentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PATCH APPOINTMENT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"const jsonData = pm.response.json();",
+									"",
+									"pm.test(\"Top-level fields are correct\", () => {",
+									"  pm.expect(jsonData).to.have.property(\"clinicId\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData).to.have.property(\"dentistId\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData).to.have.property(\"_id\").and.to.be.a(\"string\");",
+									"  pm.expect(jsonData.status).to.equal(\"BOOKED\");",
+									"  pm.expect(jsonData.start_time).to.equal(\"13:45\");",
+									"  pm.expect(jsonData.end_time).to.equal(\"14:45\");",
+									"  pm.expect(jsonData.date).to.equal(\"2024-12-24T00:00:00.000Z\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n        \"date\": \"2024-12-24\",\n        \"start_time\": \"13:45\",\n        \"end_time\": \"14:45\",\n        \"status\": \"BOOKED\",\n        \"clinicId\": \"{{clinicId}}\",\n        \"dentistId\": \"{{dentistId}}\"\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/appointments/{{appointmentId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"appointments",
+								"{{appointmentId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE APPOINTMENT",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response code is 200\", () => {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/appointments/{{appointmentId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"appointments",
+								"{{appointmentId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "users",
+			"item": [
+				{
+					"name": "Register User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains created user\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    ",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData).to.have.property(\"first_name\", \"Joe\");",
+									"    pm.expect(jsonData).to.have.property(\"last_name\", \"Doe\");",
+									"    pm.expect(jsonData).to.have.property(\"email\", \"joeDoe@email.com\");",
+									"    pm.expect(jsonData).to.have.property(\"role\", \"admin\");",
+									"    pm.expect(jsonData).to.not.have.property(\"password\");",
+									"",
+									"    pm.environment.set(\"userId\", jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"first_name\": \"Joe\",\n    \"last_name\": \"Doe\",\n    \"email\": \"joeDoe@email.com\",\n    \"role\": \"admin\",\n    \"password\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains JWT token\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    ",
+									"    pm.expect(jsonData).to.have.property(\"token\");",
+									"",
+									"    pm.environment.set(\"authToken\", jsonData.token);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\": \"joeDoe@email.com\",\n    \"password\": \"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Validate JWT Token",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains valid JWT token\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    ",
+									"    pm.expect(jsonData).to.have.property(\"is_valid\", true);",
+									"    pm.expect(jsonData).to.have.property(\"reason\", \"\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"token\": \"{{authToken}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{userId}}/jwt",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}",
+								"jwt"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add User Preference",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains created user preference\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    ",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData).to.have.property(\"start_date\", \"2024-12-12\");",
+									"    pm.expect(jsonData).to.have.property(\"end_date\", \"2024-12-15\");",
+									"    pm.expect(jsonData).to.have.property(\"is_active\", true);",
+									"    pm.expect(jsonData).to.have.property(\"days_of_week\");",
+									"    pm.expect(jsonData).to.have.property(\"time_slots\");",
+									"",
+									"    pm.environment.set(\"userPreferenceId\", jsonData.id);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"start_date\": \"2024-12-12\",\n    \"end_date\": \"2024-12-15\",\n    \"is_active\": true,\n    \"days_of_week\": [\"monday\", \"tuesday\", \"friday\"],\n    \"time_slots\": [\n        {\n            \"start_time\": \"8:00\"\n        },\n        {\n            \"start_time\": \"10:00\"\n        },\n        {\n            \"start_time\": \"12:00\"\n        }\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{userId}}/preferences",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}",
+								"preferences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Time Slot to User Preference",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {",
+									"    pm.response.to.have.status(201);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains created time slot\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    ",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData).to.have.property(\"start_time\", \"15:00\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"start_time\": \"15:00\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{userId}}/preferences/{{userPreferenceId}}/time-slots",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}",
+								"preferences",
+								"{{userPreferenceId}}",
+								"time-slots"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Users",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"Response contains users data\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    jsonData.forEach(user => {",
+									"        pm.expect(user).to.have.property(\"id\");",
+									"        pm.expect(user).to.have.property(\"first_name\");",
+									"        pm.expect(user).to.have.property(\"last_name\");",
+									"        pm.expect(user).to.have.property(\"email\");",
+									"        pm.expect(user).to.have.property(\"role\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains user data\", function () {",
+									"    const jsonData = pm.response.json();",
+									"",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData).to.have.property(\"first_name\", \"Joe\");",
+									"    pm.expect(jsonData).to.have.property(\"last_name\", \"Doe\");",
+									"    pm.expect(jsonData).to.have.property(\"email\", \"joeDoe@email.com\");",
+									"    pm.expect(jsonData).to.have.property(\"role\", \"admin\");",
+									"    pm.expect(jsonData).to.not.have.property(\"password\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{userId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Preferences",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is an array\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    pm.expect(jsonData).to.be.an(\"array\");",
+									"});",
+									"",
+									"pm.test(\"Response contains user preferences\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    jsonData.forEach(preference => {",
+									"        pm.expect(preference).to.have.property(\"id\");",
+									"        pm.expect(preference).to.have.property(\"start_date\");",
+									"        pm.expect(preference).to.have.property(\"end_date\");",
+									"        pm.expect(preference).to.have.property(\"is_active\");",
+									"        pm.expect(preference).to.have.property(\"days_of_week\");",
+									"        pm.expect(preference).to.have.property(\"time_slots\");",
+									"    });",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{userId}}/preferences",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}",
+								"preferences"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User Preference",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"pm.test(\"Response is JSON\", function () {",
+									"    pm.response.to.be.json;",
+									"});",
+									"",
+									"pm.test(\"Response contains updated user preference\", function () {",
+									"    const jsonData = pm.response.json();",
+									"    ",
+									"    pm.expect(jsonData).to.have.property(\"id\");",
+									"    pm.expect(jsonData).to.have.property(\"start_date\", \"2024-12-20\");",
+									"    pm.expect(jsonData).to.have.property(\"end_date\", \"2024-12-24\");",
+									"    pm.expect(jsonData).to.have.property(\"is_active\", true);",
+									"    pm.expect(jsonData).to.have.property(\"days_of_week\");",
+									"    pm.expect(jsonData).to.have.property(\"time_slots\");",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"start_date\": \"2024-12-20\",\n    \"end_date\": \"2024-12-24\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{userId}}/preferences/{{userPreferenceId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}",
+								"preferences",
+								"{{userPreferenceId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Remove User Preference",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"    pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/users/{{userId}}/preferences/{{userPreferenceId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{userId}}",
+								"preferences",
+								"{{userPreferenceId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "bookings",
+			"item": [
+				{
+					"name": "create patient",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"userId\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"first_name\": \"wtojpa\",\r\n  \"last_name\": \"367jme\",\r\n  \"email\": \"wtojpa.367jme@1t0ao0.edu\",\r\n  \"password\": \"6ajgb0\",\r\n  \"role\": \"patient\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/users",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create clinic",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"clinicId\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Sample clinic xyz\",\r\n    \"description\": \"Sample descriptio xyzn\",\r\n    \"address\": {\r\n        \"street\": \"Samplestreet 26\",\r\n        \"city\": \"Göteborg\",\r\n        \"postal_code\": \"41754\",\r\n        \"country\": \"Sverige\",\r\n        \"latitude\": 57.709131,\r\n        \"longitude\": 11.937441\r\n    },\r\n    \"contact\": {\r\n        \"email\": \"info@sampleclinic.se\",\r\n        \"phone_number\": \" 0123456789\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/clinics",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create dentist",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"dentistId\", jsonData.id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"first_name\": \"Sven\",\r\n    \"last_name\": \"Ericsson\",\r\n    \"specialization\": \"Dentist\",\r\n    \"years_of_experiance\": 5,\r\n    \"contact\": {\r\n        \"email\": \"s.ericsson@email.com\",\r\n        \"phone_number\": \"0701483188\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/clinics/{{clinicId}}/dentists",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"clinics",
+								"{{clinicId}}",
+								"dentists"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.environment.set(\"appointmentId\", jsonData._id);"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"dentistId\": \"{{dentistId}}\",\r\n    \"clinicId\": \"{{clinicId}}\",\r\n    \"date\": \"2025-08-16\",\r\n    \"start_time\": \"14::00\",\r\n    \"end_time\": \"15:00\",\r\n    \"status\": \"FREE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/appointments",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"pm.environment.set(\"bookingId\", jsonData._id);\r",
+									"\r",
+									"pm.test(\"Response contains booking data\", function () {\r",
+									"    pm.expect(jsonData).to.have.property(\"_id\");\r",
+									"    pm.expect(jsonData).to.have.property(\"status\", \"PENDING\");\r",
+									"    pm.expect(jsonData).to.have.property(\"timeslot\", pm.environment.get(\"appointmentId\"));\r",
+									"    pm.expect(jsonData).to.have.property(\"patient\", pm.environment.get(\"userId\"));\r",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"timeslot\": \"{{appointmentId}}\",\r\n  \"patient\": \"{{userId}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/api/v1/bookings",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bookings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch bookings",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"const jsonData = pm.response.json();\r",
+									"\r",
+									"pm.test(\"Response.bookings is an array\", function () {\r",
+									"    pm.expect(jsonData.bookings).to.be.an(\"array\").lengthOf(1);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains bookings data\", function () {\r",
+									"\r",
+									"    pm.expect(jsonData).to.have.property(\"currentPage\").to.eql(1)\r",
+									"    pm.expect(jsonData).to.have.property(\"totalPages\").to.eql(1)\r",
+									"    pm.expect(jsonData).to.have.property(\"bookingsPerPage\").to.eql(10)\r",
+									"    pm.expect(jsonData).to.have.property(\"totalBookings\").to.eql(1)\r",
+									"\r",
+									"    const booking = jsonData.bookings[0];\r",
+									"\r",
+									"    pm.expect(booking).to.have.property(\"_id\", pm.environment.get(\"bookingId\"));\r",
+									"    pm.expect(booking).to.have.property(\"status\", \"PENDING\");\r",
+									"    pm.expect(booking).to.have.property(\"timeslot\").is.an(\"object\");\r",
+									"    const timeslotData = booking.timeslot;\r",
+									"    pm.expect(timeslotData).to.have.property(\"_id\", pm.environment.get(\"appointmentId\"));\r",
+									"    pm.expect(booking).to.have.property(\"patient\").is.an(\"object\");\r",
+									"    const patientData = booking.patient;\r",
+									"    pm.expect(patientData).to.have.property(\"id\", pm.environment.get(\"userId\"));\r",
+									"});\r",
+									" "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/bookings",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bookings"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "fetch booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains bookings data\", function () {\r",
+									"\r",
+									"    const booking = pm.response.json();\r",
+									"\r",
+									"    pm.expect(booking).to.have.property(\"_id\", pm.environment.get(\"bookingId\"));\r",
+									"    pm.expect(booking).to.have.property(\"status\", \"PENDING\");\r",
+									"    pm.expect(booking).to.have.property(\"timeslot\").is.an(\"object\");\r",
+									"    const timeslotData = booking.timeslot;\r",
+									"    pm.expect(timeslotData).to.have.property(\"_id\", pm.environment.get(\"appointmentId\"));\r",
+									"    pm.expect(booking).to.have.property(\"patient\").is.an(\"object\");\r",
+									"    const patientData = booking.patient;\r",
+									"    pm.expect(patientData).to.have.property(\"id\", pm.environment.get(\"userId\"));\r",
+									"});\r",
+									" "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/bookings/{{bookingId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								"{{bookingId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "cancel booking",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									" pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response is JSON\", function () {\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Response contains bookings data\", function () {\r",
+									"\r",
+									"    const booking = pm.response.json();\r",
+									"\r",
+									"    pm.expect(booking).to.have.property(\"_id\");\r",
+									"    pm.expect(booking).to.have.property(\"status\", \"CANCELED\");\r",
+									"    pm.expect(booking).to.have.property(\"timeslot\", pm.environment.get(\"appointmentId\"));\r",
+									"    pm.expect(booking).to.have.property(\"patient\", pm.environment.get(\"userId\"));\r",
+									"});\r",
+									" "
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/api/v1/bookings/{{bookingId}}",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"bookings",
+								"{{bookingId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "host",
+			"value": "http://localhost:3000",
+			"type": "string"
+		}
+	]
+}

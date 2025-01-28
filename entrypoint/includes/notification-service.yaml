@@ -1,0 +1,24 @@
+services:
+
+  notification-service:
+    build:
+      context: ../../notification-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    hostname: notification-service
+    volumes:
+      - notification-db:/data
+      - ../../notification-service:/app
+    environment:
+      - MQTT_BROKER_URI=mqtt://message-broker:1883
+      - MQTT_BROKER_WS_URI=ws://message-broker:8083
+      - REDIS_HOSTNAME=redis-stack
+    depends_on:
+      emqx-node-1:
+        condition: service_healthy
+      emqx-node-2:
+        condition: service_healthy
+      emqx-node-3:
+        condition: service_healthy
+      redis-stack:
+        condition: service_healthy

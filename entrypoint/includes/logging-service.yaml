@@ -1,0 +1,13 @@
+services:
+
+  logging-service:
+    image: datalust/seq:2024.3
+    restart: unless-stopped
+    hostname: logging-service
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      # UI & ingestion port 
+      - 8080:80
+      # ingestion only port 
+      #- 5341:5341

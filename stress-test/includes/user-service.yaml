@@ -1,0 +1,19 @@
+services:
+
+  user-service:
+    build:
+      context: ../../user-service
+      dockerfile: Dockerfile
+    hostname: user-service
+    volumes:
+      - ../../user-service:/app
+    environment:
+      - MQTT_BROKER=message-broker
+      - ENV=test
+    depends_on:
+      emqx-node-1:
+        condition: service_healthy
+      emqx-node-2:
+        condition: service_healthy
+      emqx-node-3:
+        condition: service_healthy

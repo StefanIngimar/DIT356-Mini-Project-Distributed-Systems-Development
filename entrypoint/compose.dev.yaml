@@ -1,0 +1,18 @@
+include:
+  - ./includes-dev/message-broker.yaml  
+  - ./includes-dev/api-gateway.yaml  
+  - ./includes-dev/dentist-service.yaml  
+  - ./includes-dev/user-service.yaml  
+  - ./includes-dev/booking-service.yaml 
+  - ./includes-dev/booking-db.yaml 
+  - ./includes-dev/dentist-ui.yaml 
+  - ./includes-dev/patient-ui.yaml 
+  - ./includes-dev/admin-ui.yaml 
+  - ./includes-dev/notification-service.yaml
+  - ./includes-dev/redis.yaml 
+
+volumes:
+  dentist-db:
+  notification-db:
+  mongodb_data:
+  redis-dev-data:

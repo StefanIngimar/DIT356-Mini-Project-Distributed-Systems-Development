@@ -1,0 +1,19 @@
+services:
+
+  dentist-service:
+    build:
+      context: ../../dentist-service
+      dockerfile: Dockerfile
+    hostname: dentist-service
+    volumes:
+      - ../../dentist-service:/app
+    environment:
+      - BROKER_URI=mqtt://message-broker:1883
+      - ENV=test
+    depends_on:
+      emqx-node-1:
+        condition: service_healthy
+      emqx-node-2:
+        condition: service_healthy
+      emqx-node-3:
+        condition: service_healthy

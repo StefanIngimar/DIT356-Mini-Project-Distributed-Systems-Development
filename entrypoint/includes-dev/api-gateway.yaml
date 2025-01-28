@@ -1,0 +1,24 @@
+services:
+
+  api-gateway:
+    build:
+      context: ../../api-gateway
+      dockerfile: Dockerfile
+      target: dev
+    attach: true 
+    hostname: api-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../../api-gateway:/app
+    environment:
+      - API_PORT=3000
+      - BROKER_URI=mqtt://message-broker
+      - BROKER_WS_URI=ws://message-broker
+    depends_on:
+      - message-broker
+      - user-service
+      - dentist-service
+      - booking-service
+    healthcheck:
+     test: ["CMD-SHELL", "exit 0"]

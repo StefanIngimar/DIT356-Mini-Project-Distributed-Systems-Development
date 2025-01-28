@@ -1,0 +1,28 @@
+# IntelliJ project files 
+*.iml
+*.iws
+*.ipr
+.idea/
+.idea/*
+
+# eclipse project file
+.settings/
+.classpath
+.project
+
+# NetBeans specific
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# OS
+.DS_Store
+
+### VS Code ###
+### VisualStudioCode ###
+.vscode/
+.vscode/*

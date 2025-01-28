@@ -1,0 +1,96 @@
+services:
+  # build with Dockerfile 
+
+  message-broker:
+    build:
+      context: ../mqtt-broker
+      dockerfile: Dockerfile
+    attach: false
+    restart: unless-stopped
+    hostname: mosquitto
+    ports:
+      - 1883:1883
+
+  api-gateway:
+    build:
+      context: ../api-gateway
+      dockerfile: Dockerfile
+      target: dev
+    attach: false
+    hostname: api-gateway
+    ports:
+      - "3000:3000"
+    volumes:
+      - ../api-gateway:/app
+    environment:
+      - API_PORT=3000
+      - BROKER_URI=mqtt://message-broker
+    depends_on:
+      - message-broker
+      - user-service
+      - dentist-service
+      - booking-service
+    healthcheck:
+     test: ["CMD-SHELL", "exit 0"]
+
+  newman-client:
+    image: postman/newman:6-alpine
+    hostname: newman-client
+    volumes:
+      - ./tests/postman:/etc/newman
+    tty: true
+    environment:
+      TERM: xterm-256color
+    depends_on:
+      api-gateway:
+        condition: service_healthy
+    command: run GothTeeth.postman_collection.json --env-var host=http://api-gateway:3000
+
+  user-service:
+    build:
+      context: ../user-service
+      dockerfile: Dockerfile
+    attach: false
+    hostname: user-service
+    volumes:
+      - ../user-service:/app
+    environment:
+      - MQTT_BROKER=message-broker
+      - ENV=test
+    depends_on:
+      - message-broker
+
+  dentist-service:
+    build:
+      context: ../dentist-service
+      dockerfile: Dockerfile
+    attach: false
+    hostname: dentist-service
+    volumes:
+      - ../dentist-service:/app
+    environment:
+      - BROKER_URI=mqtt://message-broker:1883
+      - ENV=test
+    depends_on:
+      - message-broker
+
+  booking-service:
+    build:
+      context: ../booking-service
+      dockerfile: Dockerfile
+      target: test
+    attach: false
+    hostname: booking-service
+    volumes:
+      - ../booking-service:/app
+    environment:
+      - BROKER_URI=mqtt://message-broker
+    depends_on:
+      - message-broker
+      - booking-db
+
+  booking-db:
+    image: mongodb/mongodb-community-server:5.0-ubi8
+    attach: false
+    restart: unless-stopped
+    hostname: booking-db

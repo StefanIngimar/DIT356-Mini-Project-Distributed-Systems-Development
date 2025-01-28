@@ -1,0 +1,37 @@
+## Global section
+
+# stages and their order 
+stages:
+  - build
+  - test
+
+# defaults for all jobs 
+default:
+  # Docker image that the job runs in
+  image: node:20-alpine
+  
+  # cache files and directories between jobs
+  cache:
+    key: $CI_COMMIT_REF_SLUG
+    paths:
+    - node_modules/
+
+## Jobs section
+
+build-job:
+  stage: build
+  tags: 
+    - docker
+  script:
+    - npm install
+
+test-job:
+  stage: test
+  tags: 
+    - docker
+  #services:
+  #  - name: cjarju/eclipse-mosquitto:2.0
+  #    alias: mosquitto 
+  script:
+    - npm run ci-test
+ 

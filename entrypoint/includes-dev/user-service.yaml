@@ -1,0 +1,14 @@
+services:
+
+  user-service:
+    build:
+      context: ../../user-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    hostname: user-service
+    volumes:
+      - ../../user-service:/app
+    environment:
+      - MQTT_BROKER=message-broker
+    depends_on:
+      - message-broker

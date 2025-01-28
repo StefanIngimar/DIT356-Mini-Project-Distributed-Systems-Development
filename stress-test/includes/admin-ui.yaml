@@ -1,0 +1,14 @@
+services:
+
+  admin-ui:
+    build:
+      context: ../../admin-ui
+      dockerfile: Dockerfile
+    hostname: admin-ui
+    ports:
+      - 5179:5173
+    environment:
+      - VITE_API_BASE_URL=http://api-gateway:3000/api/v1
+    depends_on:
+      api-gateway:
+        condition: service_started

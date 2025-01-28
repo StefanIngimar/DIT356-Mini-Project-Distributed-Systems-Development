@@ -1,0 +1,23 @@
+# General
+loguru==0.7.2
+python-dotenv==1.0.1
+
+# Communication
+paho-mqtt==2.1.0 
+
+# Database
+SQLAlchemy==2.0.36
+alembic==1.14.0
+
+# Data parsing and validation
+pydantic==2.9.2 
+
+# JWT and Hashing
+PyJWT==2.10.0
+bcrypt==4.2.0
+
+# Testing
+pytest==8.3.3
+
+# Dev
+black==24.10.0

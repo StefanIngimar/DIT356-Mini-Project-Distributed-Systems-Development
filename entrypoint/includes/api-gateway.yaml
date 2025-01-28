@@ -1,0 +1,38 @@
+services:
+
+  api-gateway:
+    build:
+      context: ../../api-gateway
+      dockerfile: Dockerfile
+      target: dev
+    restart: unless-stopped
+    #hostname: api-gateway
+    #ports:
+    #  - 3000-3001:3000
+    volumes:
+      - ../../api-gateway:/app
+    env_file: ../../api-gateway/.env
+    environment:
+      - API_PORT=3000
+      - BROKER_URI=mqtt://message-broker
+    depends_on:
+      emqx-node-1:
+        condition: service_healthy
+      emqx-node-2:
+        condition: service_healthy
+      emqx-node-3:
+        condition: service_healthy
+      dentist-service:
+        condition: service_started
+      user-service:
+        condition: service_started
+      booking-service:
+        condition: service_started   
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: dnsrr 
+    networks:
+      default:
+        aliases:
+          - api-gateway

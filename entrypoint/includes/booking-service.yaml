@@ -1,0 +1,36 @@
+services:
+
+  booking-service:
+    build:
+      context: ../../booking-service
+      dockerfile: Dockerfile
+      target: dev
+    restart: unless-stopped
+    #hostname: booking-service
+    volumes:
+      - ../../booking-service:/app
+    env_file: ../../booking-service/.env
+    environment:
+      - BROKER_URI=mqtt://message-broker
+      - MONGODB_URI=mongodb://booking-db-0:27017,booking-db-1:27017,booking-db-2:27017/BookingServiceDev?replicaSet=rs0&w=majority&retryWrites=true&readPreference=primaryPreferred&maxStalenessSeconds=120
+    depends_on:
+      emqx-node-1:
+        condition: service_healthy
+      emqx-node-2:
+        condition: service_healthy
+      emqx-node-3:
+        condition: service_healthy
+      booking-db-0:
+        condition: service_started
+      booking-db-1:
+        condition: service_started
+      booking-db-2:
+        condition: service_started
+    deploy:
+      mode: replicated
+      replicas: 2
+      endpoint_mode: dnsrr 
+    networks:
+      default:
+        aliases:
+          - booking-service

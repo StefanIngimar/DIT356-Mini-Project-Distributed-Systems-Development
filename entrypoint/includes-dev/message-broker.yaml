@@ -1,0 +1,13 @@
+services:
+
+  message-broker:
+    build:
+      context: ../../mqtt-broker
+      dockerfile: Dockerfile   
+    restart: unless-stopped 
+    hostname: mosquitto
+    ports:
+      - 1883:1883
+      - 9001:9001
+    healthcheck:
+      test: ["CMD-SHELL", "exit 0"]

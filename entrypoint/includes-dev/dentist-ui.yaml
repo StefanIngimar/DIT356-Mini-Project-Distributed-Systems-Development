@@ -1,0 +1,13 @@
+services:
+
+  dentist-ui:
+    build:
+      context: ../../dentist-ui
+      dockerfile: Dockerfile
+    hostname: dentist-ui
+    ports:
+      - 5173:5173
+    environment:
+      - VITE_API_BASE_URL=http://api-gateway:3000/api/v1
+    depends_on:
+      - message-broker

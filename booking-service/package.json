@@ -1,0 +1,33 @@
+{
+    "name": "mqtt-client",
+    "version": "0.1.0",
+    "engines": {
+        "node": ">=20.0.0"
+    },
+    "private": true,
+    "description": "Node.js MQTT client for GothTeeth Booking Service: Distributed Systems Development (DIT356)",
+    "main": "app.js",
+    "scripts": {
+        "start": "cross-env-shell NODE_ENV=production \"node app.js\"",
+        "dev": "nodemon app.js",
+        "test": "cross-env-shell NODE_ENV=test \"npm run dropdb && node app.js\"",
+        "ci-test": "cross-env-shell BROKER_URI=mqtt://broker.hivemq.com \"node ./tests/mqttClientTest.js\"",
+        "dropdb": "node ./database/dropDb.js",
+        "lint": "eslint ."
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://git.chalmers.se:courses/dit355/2024/student_teams/dit356_2024_02/booking-service.git"
+    },
+    "dependencies": {
+        "@datalust/winston-seq": "^2.0.0",
+        "cross-env": "^7.0.3",
+        "mongoose": "^8.8.2",
+        "mqtt": "^5.10.1",
+        "nanoid": "^3.3.7",
+        "winston": "^3.17.0"
+    },
+    "devDependencies": {
+        "nodemon": "^3.1.7"
+    }
+}

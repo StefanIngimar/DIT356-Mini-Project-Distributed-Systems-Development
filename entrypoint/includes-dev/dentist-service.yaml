@@ -1,0 +1,15 @@
+services:
+
+  dentist-service:
+    build:
+      context: ../../dentist-service
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    hostname: dentist-service
+    volumes:
+      - dentist-db:/data
+      - ../../dentist-service:/app
+    environment:
+      - BROKER_URI=mqtt://message-broker:1883
+    depends_on:
+      - message-broker

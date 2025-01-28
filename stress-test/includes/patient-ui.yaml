@@ -1,0 +1,14 @@
+services:
+
+  patient-ui:
+    build:
+      context: ../../patient-ui
+      dockerfile: Dockerfile
+    hostname: patient-ui
+    ports:
+      - 5178:5173
+    environment:
+      - VITE_API_BASE_URL=http://api-gateway:3000/api/v1
+    depends_on:
+      api-gateway:
+        condition: service_started

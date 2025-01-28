@@ -1,0 +1,40 @@
+#!/usr/bin/env python3
+
+import sys
+from enum import Enum
+from subprocess import check_output
+
+
+class CommitArgs(Enum):
+    COMMIT_MSG_FILE = 1
+    COMMIT_SOURCE = 2
+    SHA1 = 3
+
+
+def main():
+    branch_name = (check_output(["git", "symbolic-ref", "--short", "HEAD"])).decode().strip()
+    issue_id = "".join(filter(lambda v: v.isdigit(), branch_name))
+
+    is_branch_name_required = True
+    if branch_name in ["main", "master", "dev"]:
+        is_branch_name_required = False
+
+    if is_branch_name_required and not issue_id:
+        print("Invalid branch name - issue ID not found.")
+        sys.exit(1)
+
+    with open(sys.argv[CommitArgs.COMMIT_MSG_FILE.value], "r+") as commit_file_handle:
+        commit_msg = commit_file_handle.read()
+        # Move cursor to the beginning of the line
+        commit_file_handle.seek(0, 0)
+
+        if issue_id:
+            commit_file_handle.write(f"(#{issue_id}) {commit_msg}")
+        else:
+            commit_file_handle.write(f"{commit_msg}")
+
+
+
+if __name__ == "__main__":
+    main()
+

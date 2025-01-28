@@ -1,0 +1,79 @@
+services:
+
+  # EMQX cluster
+  emqx-node-1:
+    image: emqx:5.8
+    restart: unless-stopped
+    hostname: emqx-node-1
+    environment:
+      - EMQX_NODE__NAME=emqx@node1.emqx.io
+    volumes:
+      - ../config/emqx/emqx.conf:/opt/emqx/etc/emqx.conf
+      #- emqx-data-vol:/opt/emqx/data
+      #- emqx-log-vol:/opt/emqx/log
+    networks:
+      emqx-bridge:
+        priority: 10
+        aliases:
+          - node1.emqx.io
+      default:
+        aliases:
+          - message-broker 
+    ports:
+      #- 1883:1883
+      #- 8083:8083
+      # web admin UI
+      - 18083:18083
+    healthcheck:
+      test: ["CMD-SHELL", "exit 0"]
+      # default time values
+
+  emqx-node-2:
+    image: emqx:5.8
+    restart: unless-stopped
+    hostname: emqx-node-2
+    environment:
+      - EMQX_NODE__NAME=emqx@node2.emqx.io
+    volumes:
+      - ../config/emqx/emqx.conf:/opt/emqx/etc/emqx.conf
+      #- emqx-data-vol:/opt/emqx/data
+      #- emqx-log-vol:/opt/emqx/log
+    networks:
+      emqx-bridge:
+        priority: 10
+        aliases:
+          - node2.emqx.io
+      default:
+        aliases:
+          - message-broker
+    ports:
+      #- 1884:1883
+      #- 8084:8083
+      - 18084:18083
+    healthcheck:
+      test: ["CMD-SHELL", "exit 0"]
+
+  emqx-node-3:
+    image: emqx:5.8
+    restart: unless-stopped
+    hostname: emqx-node-3
+    environment:
+      - EMQX_NODE__NAME=emqx@node3.emqx.io
+    volumes:
+      - ../config/emqx/emqx.conf:/opt/emqx/etc/emqx.conf
+      #- emqx-data-vol:/opt/emqx/data
+      #- emqx-log-vol:/opt/emqx/log
+    networks:
+      emqx-bridge:
+        priority: 10
+        aliases:
+          - node3.emqx.io
+      default:
+        aliases:
+          - message-broker
+    ports:
+      #- 1885:1883
+      #- 8085:8083
+      - 18085:18083
+    healthcheck:
+      test: ["CMD-SHELL", "exit 0"]

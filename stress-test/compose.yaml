@@ -1,0 +1,23 @@
+include:
+  - ./includes/message-broker.yaml  
+  - ./includes/api-gateway.yaml  
+  - ./includes/dentist-service.yaml  
+  - ./includes/user-service.yaml  
+  - ./includes/booking-service.yaml 
+  - ./includes/booking-db.yaml 
+  #- ./includes/dentist-ui.yaml 
+  #- ./includes/patient-ui.yaml 
+  #- ./includes/admin-ui.yaml 
+  - ./includes/reverse-proxy.yaml  
+
+volumes:
+  dentist-db:
+  #emqx-data-vol:
+  #emqx-log-vol:
+
+networks:
+  emqx-bridge:
+    driver: bridge
+  mongo-bridge:
+    driver: bridge
+    

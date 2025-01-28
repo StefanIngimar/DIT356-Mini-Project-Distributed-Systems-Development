@@ -1,0 +1,16 @@
+services:
+
+  booking-service:
+    build:
+      context: ../../booking-service
+      dockerfile: Dockerfile
+      target: dev 
+    attach: false
+    hostname: booking-service
+    volumes:
+      - ../../booking-service:/app
+    environment:
+      - BROKER_URI=mqtt://message-broker
+    depends_on:
+      - message-broker
+      - booking-db

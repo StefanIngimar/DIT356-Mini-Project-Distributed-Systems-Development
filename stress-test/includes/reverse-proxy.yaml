@@ -1,0 +1,14 @@
+services:
+
+  # api-gateway reverse proxy/load balancer
+  reverse-proxy:
+    image: haproxytech/haproxy-alpine:3.2
+    hostname: reverse-proxy
+    ports:
+      - 3000:3000
+      # web admin
+      - 8405:8404
+    volumes:
+      - ../config/haproxy:/usr/local/etc/haproxy
+    depends_on:
+      - api-gateway
